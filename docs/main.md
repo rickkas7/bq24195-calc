@@ -8,7 +8,7 @@
 Provide the cut-off temperatures and this tool will calculate the values of $RT1$ and $RT2$
 for a battery with a 103AT NTC thermistor.
 
-<table>
+<table id="resTable">
     <tbody>
         <tr>
             <td>High cut-off temperature</td>
@@ -107,13 +107,46 @@ for a battery with a 103AT NTC thermistor.
 
 ## Cut-off calculator
 
+If you have known values for $RT1$ and $RT2$ this will calculate the expected operating temperature range
+for a battery with a 103AT NTC thermistor.
+
+<table id="cutOffTable">
+    <tbody>
+        <tr>
+            <td>High-side resistor $RT1$</td>
+            <td><input type="text" id="cutOffHigh" size="8" value="5600" /></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Low-side resistor $RT2$</td>
+            <td><input type="text" id="cutOffLow" size="8" value="33000" /></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Minimum charge temperature</td>
+            <td><span data-key="minTemp"></span></td>
+            <td>&deg;C</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Maximum charge temperature</td>
+            <td><span data-key="maxTemp"></span></td>
+            <td>&deg;C</td>
+            <td>&nbsp;</td>
+        </tr>
+    </tbody>
+</table>
+
+
 
 ## No temperature sensor
 
 If you do not have a thermistor, this tool will calculate whether a given combination of high and 
 low side resistors will enable or disable charging.
 
-<table>
+<table id="noTempTable">
     <tbody>
         <tr>
             <td>High-side resistor $RT1$</td>

@@ -100,7 +100,7 @@ $(document).ready(function() {
         return NaN;
     }
 
-    const updateFields = function(obj) {
+    const updateFields = function(obj, parentElem) {
         for(const key in obj) {
             let value = obj[key];
 
@@ -108,7 +108,7 @@ $(document).ready(function() {
                 value = Math.round(value * 100) / 100;
             }
 
-            $('span[data-key="' + key + '"').text(value);
+            $(parentElem).find('span[data-key="' + key + '"').text(value);
         }
     }
 
@@ -170,11 +170,45 @@ $(document).ready(function() {
  
                 console.log('calculateResistance', param);
 
-                updateFields(param);
+                updateFields(param, $('#resTable'));
             };
             calculateResistance();
             $('#resCalcHigh,#resCalcLow,#resRegn,#resTestTemperature').on('input', calculateResistance);
+
+            
+            const calculateCutOff = function() {
+                let param = {};
+                
+                param.vref = 6.0;
+
+                param.rt1 = parseFloat($('#cutOffHigh').val());
+                param.rt2 = parseFloat($('#cutOffLow').val());
+
+                param.vltf = 0.735 * param.vref;
+                param.vhtf = 0.472 * param.vref;
+
+                for(param.resTestTemperature = thermistorResistance[0].temp; param.resTestTemperature <= thermistorResistance[thermistorResistance.length - 1].temp; param.resTestTemperature++) {
+                    param.resTestResistance = resistanceForTemperature(param.resTestTemperature);
+                    param.resTestLow = 1 / (1/param.rt2 + 1/param.resTestResistance);
+                    param.resTestVoltage = (param.vref * param.resTestLow) / (param.rt1 + param.resTestLow);
+    
+                    if (param.vhtf <= param.resTestVoltage && param.resTestVoltage < param.vltf) {
+                        if (typeof param.minTemp == 'undefined') {
+                            param.minTemp = param.resTestTemperature;
+                        }
+                        param.maxTemp = param.resTestTemperature;
+                    }
+                }
+
+                console.log('calculateCutOff', param);
+
+                updateFields(param, $('#cutOffTable'));
+
+            }
+            calculateCutOff();
+            $('#cutOffHigh,#cutOffLow').on('input', calculateCutOff);
         
+
             const calculateNoTemp = function() {
                 let param = {};
                 
@@ -188,16 +222,15 @@ $(document).ready(function() {
 
                 param.resTestVoltage = (param.vref * param.resTestLow) / (param.resTestHigh + param.resTestLow);
 
-                let param2 = {};
                 if (param.vhtf <= param.resTestVoltage && param.resTestVoltage < param.vltf) {
-                    param2.noTempStatus = 'Charging enabled';
+                    param.noTempStatus = 'Charging enabled';
                 }
                 else {
-                    param2.noTempStatus = 'Charging disabled';
+                    param.noTempStatus = 'Charging disabled';
                 }
                 console.log('calculateNoTemp', param);
 
-                updateFields(param2);
+                updateFields(param, $('#noTempTable'));
 
             }
             calculateNoTemp();

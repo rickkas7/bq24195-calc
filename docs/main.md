@@ -5,7 +5,8 @@
 
 ## Resistor calculator
 
-Assuming a battery with a 103AT 10K thermistor, this section will calculate $RT1$ and $RT2$
+Provide the cut-off temperatures and this tool will calculate the values of $RT1$ and $RT2$
+for a battery with a 103AT NTC thermistor.
 
 <table>
     <tbody>
@@ -45,6 +46,61 @@ Assuming a battery with a 103AT 10K thermistor, this section will calculate $RT1
             <td>&ohm;</td>
             <td>Calculated low-side resistor</td>
         </tr>
+        <tr>
+            <td colspan="4" style="padding-top: 16px; padding-bottom: 8px;">The following values are only needed to verify calculations or test an actual device</td>
+        </tr>
+        <tr>
+            <td>REGN</td>
+            <td><input type="text" id="resRegn" size="8" value="6.0" /></td>
+            <td>V</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>$V_{HTF}$</td>
+            <td><span data-key="vhtf"></span></td>
+            <td>V</td>
+            <td>Hot temperature TS threshold</td>
+        </tr>
+        <tr>
+            <td>$V_{LTF}$</td>
+            <td><span data-key="vltf"></span></td>
+            <td>V</td>
+            <td>Cold temperature TS threshold</td>
+        </tr>
+        <tr>
+            <td>$V_{TCO}$</td>
+            <td><span data-key="vtco"></span></td>
+            <td>V</td>
+            <td>Cold temperature cut-off</td>
+        </tr>
+        <tr>
+            <td>Test temperature</td>
+            <td><input type="text" id="resTestTemperature" size="8" value="30" /></td>
+            <td>&deg;C</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Test thermistor resistance</td>
+            <td><span data-key="resTestResistance"></span></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Test low-side resistance</td>
+            <td><span data-key="resTestLow"></span></td>
+            <td>&ohm;</td>
+            <td>RT2 and thermistor in parallel</td>
+        </tr>
+        <tr>
+            <td>Test TS</td>
+            <td><span data-key="resTestVoltage"></span></td>
+            <td>V</td>
+            <td>Voltage at TS pin</td>
+        </tr>
+        <tr>
+            <td>Test Charge Status</td>
+            <td colspan="3"><span data-key="resTestStatus"></span></td>
+        </tr>
     </tbody>
 </table>
 
@@ -53,6 +109,30 @@ Assuming a battery with a 103AT 10K thermistor, this section will calculate $RT1
 
 
 ## No temperature sensor
+
+If you do not have a thermistor, this tool will calculate whether a given combination of high and 
+low side resistors will enable or disable charging.
+
+<table>
+    <tbody>
+        <tr>
+            <td>High-side resistor $RT1$</td>
+            <td><input type="text" id="noTempHigh" size="8" value="5600" /></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Low-side resistor $RT2$</td>
+            <td><input type="text" id="noTempLow" size="8" value="10000" /></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Charge Status</td>
+            <td colspan="3"><span data-key="noTempStatus"></span></td>
+        </tr>
+    </tbody>
+</table>
 
 
 ## Background

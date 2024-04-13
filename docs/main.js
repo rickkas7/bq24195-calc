@@ -139,7 +139,7 @@ $(document).ready(function() {
                 let param = {};
                 // vref can actually be anything, but this is just here to prove it's the case by
                 // changing it to other values. It's the voltage on REGN.
-                param.vref = 6.0;
+                param.vref = parseFloat($('#resRegn').val());;
 
                 param.tempLow = parseFloat($('#resCalcLow').val());
                 param.tempHigh = parseFloat($('#resCalcHigh').val());
@@ -152,18 +152,56 @@ $(document).ready(function() {
                 param.vtco = 0.447 * param.vref;
 
                 param.rt2 = (param.vref * param.rthcold * param.rthhot * (1/param.vltf - 1/param.vtco)) / 
-                    (param.rthhot * (param.vref / param.vtco - 1) - param.rthcold * param.vref/param.vltf - 1);
+                    (param.rthhot * (param.vref / param.vtco - 1) - param.rthcold * (param.vref/param.vltf - 1));
 
                 param.rt1 = (param.vref/param.vltf - 1) / (1/param.rt2 + 1/param.rthcold);
 
-                console.log('resCalc', param);
+                param.resTestTemperature = parseFloat($('#resTestTemperature').val());
+                param.resTestResistance = resistanceForTemperature(param.resTestTemperature);
+                param.resTestLow = 1 / (1/param.rt2 + 1/param.resTestResistance);
+                param.resTestVoltage = (param.vref * param.resTestLow) / (param.rt1 + param.resTestLow);
+
+                if (param.vhtf <= param.resTestVoltage && param.resTestVoltage < param.vltf) {
+                    param.resTestStatus = 'Charging enabled';
+                }
+                else {
+                    param.resTestStatus = 'Charging disabled';
+                }
+ 
+                console.log('calculateResistance', param);
 
                 updateFields(param);
             };
             calculateResistance();
-
-            $('#resCalcHigh,#resCalcLow').on('input', calculateResistance);
+            $('#resCalcHigh,#resCalcLow,#resRegn,#resTestTemperature').on('input', calculateResistance);
         
+            const calculateNoTemp = function() {
+                let param = {};
+                
+                param.vref = 6.0;
+
+                param.resTestHigh = parseFloat($('#noTempHigh').val());
+                param.resTestLow = parseFloat($('#noTempLow').val());
+
+                param.vltf = 0.735 * param.vref;
+                param.vhtf = 0.472 * param.vref;
+
+                param.resTestVoltage = (param.vref * param.resTestLow) / (param.resTestHigh + param.resTestLow);
+
+                let param2 = {};
+                if (param.vhtf <= param.resTestVoltage && param.resTestVoltage < param.vltf) {
+                    param2.noTempStatus = 'Charging enabled';
+                }
+                else {
+                    param2.noTempStatus = 'Charging disabled';
+                }
+                console.log('calculateNoTemp', param);
+
+                updateFields(param2);
+
+            }
+            calculateNoTemp();
+            $('#noTempHigh,#noTempLow').on('input', calculateNoTemp);
         
         });
 

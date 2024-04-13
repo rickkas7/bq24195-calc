@@ -99,16 +99,29 @@ $(document).ready(function() {
         return NaN;
     }
 
-    const updateFields = function(obj, parentElem) {
+    let updateFieldsInternal;
+    updateFieldsInternal = function(obj, parts, parentElem) {
         for(const key in obj) {
             let value = obj[key];
+            parts.push(key);
 
-            if (typeof value == 'number') {
-                value = Math.round(value * 100) / 100;
+            if (typeof value == 'object') {
+                updateFieldsInternal(value, parts, parentElem);
+            }
+            else {
+                if (typeof value == 'number') {
+                    value = Math.round(value * 100) / 100;
+                }
+                $(parentElem).find('span[data-key="' + parts.join('.') + '"').text(value);    
             }
 
-            $(parentElem).find('span[data-key="' + key + '"').text(value);
+            parts.pop();
         }
+    }
+
+
+    const updateFields = function(obj, parentElem) {
+        updateFieldsInternal(obj, [], parentElem)
     }
 
 
@@ -178,13 +191,14 @@ $(document).ready(function() {
             const calculateCutOff = function() {
                 let param = {};
                 
-                param.vref = 6.0;
+                param.vref = parseFloat($('#cutOffRegn').val());;;
 
                 param.rt1 = parseFloat($('#cutOffHigh').val());
                 param.rt2 = parseFloat($('#cutOffLow').val());
 
                 param.vltf = 0.735 * param.vref;
                 param.vhtf = 0.472 * param.vref;
+                param.vtco = 0.447 * param.vref;
 
                 for(param.resTestTemperature = thermistorResistance[0].temp; param.resTestTemperature <= thermistorResistance[thermistorResistance.length - 1].temp; param.resTestTemperature++) {
                     param.resTestResistance = resistanceForTemperature(param.resTestTemperature);
@@ -197,6 +211,15 @@ $(document).ready(function() {
                         }
                         param.maxTemp = param.resTestTemperature;
                     }
+                }
+                
+                for(const which of [{key:'min', temp:'minTemp'}, {key:'max', temp:'maxTemp'}]) {
+                    const param2 = param[which.key] = {};
+                    param2.resTestResistance = param[which.temp];
+
+                    param2.resTestResistance = resistanceForTemperature(param2.resTestResistance);
+                    param2.resTestLow = 1 / (1/param.rt2 + 1/param2.resTestResistance);
+                    param2.resTestVoltage = (param.vref * param2.resTestLow) / (param.rt1 + param2.resTestLow);
                 }
 
                 console.log('calculateCutOff', param);

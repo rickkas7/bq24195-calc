@@ -136,6 +136,69 @@ for a battery with a 103AT NTC thermistor.
             <td>&deg;C</td>
             <td>&nbsp;</td>
         </tr>
+        <tr>
+            <td colspan="4" style="padding-top: 16px; padding-bottom: 8px;">The following values are only needed to verify calculations or test an actual device</td>
+        </tr>
+        <tr>
+            <td>REGN</td>
+            <td><input type="text" id="cutOffRegn" size="8" value="6.0" /></td>
+            <td>V</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>$V_{HTF}$</td>
+            <td><span data-key="vhtf"></span></td>
+            <td>V</td>
+            <td>Hot temperature TS threshold</td>
+        </tr>
+        <tr>
+            <td>$V_{LTF}$</td>
+            <td><span data-key="vltf"></span></td>
+            <td>V</td>
+            <td>Cold temperature TS threshold</td>
+        </tr>
+        <tr>
+            <td>$V_{TCO}$</td>
+            <td><span data-key="vtco"></span></td>
+            <td>V</td>
+            <td>Cold temperature cut-off</td>
+        </tr>
+        <tr>
+            <td>Min temp thermistor resistance</td>
+            <td><span data-key="min.resTestResistance"></span></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Min temp low-side resistance</td>
+            <td><span data-key="min.resTestLow"></span></td>
+            <td>&ohm;</td>
+            <td>RT2 and thermistor in parallel</td>
+        </tr>
+        <tr>
+            <td>Min temp TS</td>
+            <td><span data-key="min.resTestVoltage"></span></td>
+            <td>V</td>
+            <td>Voltage at TS pin, must be < $V_{LTF}$</td>
+        </tr>
+        <tr>
+            <td>Max temp thermistor resistance</td>
+            <td><span data-key="max.resTestResistance"></span></td>
+            <td>&ohm;</td>
+            <td>&nbsp;</td>
+        </tr>
+        <tr>
+            <td>Max temp low-side resistance</td>
+            <td><span data-key="max.resTestLow"></span></td>
+            <td>&ohm;</td>
+            <td>RT2 and thermistor in parallel</td>
+        </tr>
+        <tr>
+            <td>Max temp TS</td>
+            <td><span data-key="max.resTestVoltage"></span></td>
+            <td>V</td>
+            <td>Voltage at TS pin, must be > $V_{HTF}$</td>
+        </tr>
     </tbody>
 </table>
 

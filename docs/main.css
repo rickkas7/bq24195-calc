@@ -1,0 +1,28 @@
+@CHARSET "UTF-8";
+
+body
+{
+    background-color:#202020;
+	color:#e0e0e0;
+	font-family: helvetica, sans-serif;
+	max-width: 1000px;
+}
+
+
+.katex-html
+{
+	display: none;
+}
+
+table {
+	border-spacing: 6px;
+}
+
+h2 {
+	margin-top: 36px;
+	margin-bottom: 24px;
+}
+
+a {
+	color: #e0e0e0;
+  }

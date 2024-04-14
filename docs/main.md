@@ -8,7 +8,9 @@
 Provide the cut-off temperatures and this tool will calculate the values of $RT1$ and $RT2$
 for a battery with a 103AT NTC thermistor.
 
-<table id="resTable">
+<div id="res">
+
+<table>
     <tbody>
         <tr>
             <td>High cut-off temperature</td>
@@ -105,12 +107,16 @@ for a battery with a 103AT NTC thermistor.
 </table>
 
 
+</div>
+
 ## Cut-off calculator
+
+<div id="cutOff">
 
 If you have known values for $RT1$ and $RT2$ this will calculate the expected operating temperature range
 for a battery with a 103AT NTC thermistor.
 
-<table id="cutOffTable">
+<table>
     <tbody>
         <tr>
             <td>High-side resistor $RT1$</td>
@@ -202,14 +208,16 @@ for a battery with a 103AT NTC thermistor.
     </tbody>
 </table>
 
-
+</div>
 
 ## No temperature sensor
 
 If you do not have a thermistor, this tool will calculate whether a given combination of high and 
 low side resistors will enable or disable charging.
 
-<table id="noTempTable">
+<div id="noTemp">
+
+<table>
     <tbody>
         <tr>
             <td>High-side resistor $RT1$</td>
@@ -231,13 +239,15 @@ low side resistors will enable or disable charging.
 </table>
 
 
+</div>
+
 ## Background
 
 The bq24195 PMIC supports a temperature sensor, typically part of the battery pack, to control charging based on temperature. From the datasheet:
 
 ![](images/ts-network.png)
 
-The temperature sensor is a NTC (negative temperature coefficient) thermistor. For example, the [103AT](https://www.digikey.com/en/products/detail/semitec-usa-corp/103AT-2/16579059), a 10K NTC thermistor.
+The temperature sensor is a NTC (negative temperature coefficient) thermistor. For example, the [103AT](https://www.digikey.com/en/products/detail/semitec-usa-corp/103AT-2/16579059), a 10K NTC thermistor. 
 
 ![](images/thermistor.png)
 
@@ -255,7 +265,7 @@ There's this imposing formula in the datasheet for calculating $RT1$ and $RT2$:
 
 ![](images/formula.png)
 
-And this figure:
+And this figure. Since the thermistor is NTC, the voltage is closer to GND for high temperatures and closer to REGN for low temperatures, so the temperature scale is upside down from what you'd normally expect.
 
 ![](images/fig13.png)
 
@@ -277,4 +287,27 @@ The thing that's somewhat confusing with all of these voltages like $V_{VREF}$ i
 | $V_{HTF}$ | High temperature threshold, $0.472 \times V_{REGN}$ |
 | $V_{TCO}$ | Cold temperature cut-off, $0.447 \times V_{REGN}$ |
 
+### Calculating charging voltages
+
+The voltage at the TS pin is from the TS voltage divider. The high is connected to REGN by $RT1$.
+
+The low side has parallel resistors $RT2$ and the thermistor.
+
+```latex
+R_{LOW} = \frac{RT2 \cdot R_{TH}}{RT2 + R_{TH}}
+```
+
+So the voltage at TS can be determined as voltage divider circuit:
+
+```latex
+V_{TS} = \frac{V_{REGN} \cdot R_{LOW}}{RT1 + R_{LOW}}
+```
+
+You can then compare these to the temperature thresholds to determine if charging is enabled or disabled. This is done in the cut-off calculator, above.
+
+However, since the cut-off voltages are also relative to V_{REGN} they cancel out and you get a simplified formula when charging is enabled that does not depend on REGN:
+
+```latex
+0.472 <  \frac{R_{LOW}}{RT1 + R_{LOW}} < 0.735
+```
 

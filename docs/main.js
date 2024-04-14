@@ -182,7 +182,7 @@ $(document).ready(function() {
  
                 console.log('calculateResistance', param);
 
-                updateFields(param, $('#resTable'));
+                updateFields(param, $('#res'));
             };
             calculateResistance();
             $('#resCalcHigh,#resCalcLow,#resRegn,#resTestTemperature').on('input', calculateResistance);
@@ -224,7 +224,7 @@ $(document).ready(function() {
 
                 console.log('calculateCutOff', param);
 
-                updateFields(param, $('#cutOffTable'));
+                updateFields(param, $('#cutOff'));
 
             }
             calculateCutOff();
@@ -252,7 +252,7 @@ $(document).ready(function() {
                 }
                 console.log('calculateNoTemp', param);
 
-                updateFields(param, $('#noTempTable'));
+                updateFields(param, $('#noTemp'));
 
             }
             calculateNoTemp();
